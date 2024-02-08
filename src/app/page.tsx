@@ -1,19 +1,15 @@
 "use client";
-// import ICAL from "js";
+
 import { EventCard } from "@/components";
 import { Event, Component, Duration, parse } from "ical.js";
-import { use, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
-  const [url, setURL] = useState(
-    "https://p52-caldav.icloud.com/published/2/MTE3ODYzMTU0MTExNzg2MzW_rKfLZez6ETUs921UcntfiaY1mHTTnE8NupNp8y-hXno2wdT2VEWNeVfnmlhnB3Wcp_u3yEnAFZLndp4rk3Y"
-  );
+  const [url, setURL] = useState("");
   const [events, setEvents] = useState<Event[]>([]);
 
   const handleSetURL = (e: React.ChangeEvent<HTMLInputElement>) => {
-    () => {
-      setURL(e.target.value);
-    };
+    setURL(e.target.value);
   };
 
   const handleLoad = async () => {
@@ -26,7 +22,10 @@ export default function Home() {
       component
         .getAllSubcomponents("vevent")
         .map((event) => new Event(event))
-        .sort((a, b) => a.startDate.toJSDate() - b.startDate.toJSDate())
+        .sort(
+          (a, b) =>
+            a.startDate.toJSDate().valueOf() - b.startDate.toJSDate().valueOf()
+        )
     );
   };
 
